@@ -1,0 +1,305 @@
+<html>
+    <head>
+        <style>
+
+            html,body{
+                border:0;
+                margin:0;
+                padding:0;
+            }
+            
+            #fulls_screen_container {
+                position: fixed;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;
+                pointer-events: none;
+                overflow: auto;
+            }
+
+            #overlayimage{
+                width: 100%;
+                height: 100%;
+                position: fixed;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;
+                border:0;
+                margin:0;
+                padding:0;
+            }
+            
+            #progress_bar_container{
+                margin-top: 20px;
+                margin-left: auto;
+                margin-right: auto;
+                height: 40;
+                width: 98%;
+                overflow: auto;
+            }
+
+            #left_player_progress_bar_container{
+                height:100%;
+                width: 49.7%; 
+                float:left;
+            }
+
+            #right_player_progress_bar_container{
+                height:100%;
+                width: 49.7%; 
+                float: right;
+            }
+
+            #left_player_progress_bar{
+                height:100%;
+                width: 10%; 
+                border-radius: 10px;
+                float:right;
+                background: red;
+            }
+
+            #right_player_progress_bar{
+                height:100%;
+                width: 30%; 
+                border-radius: 10px;
+                float: left;
+                background: blue;
+            }
+
+            #left_player_progress_bar, #right_player_progress_bar{ 
+                opacity: 90%;
+            }
+
+            #players_score_container{
+                margin-top: 5px;
+                margin-left: auto;
+                margin-right: auto;
+                width: 150px;
+            }
+
+
+            #left_player_score_container{
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+                float: left;
+                justify-content: center;
+                text-align: center;
+            }
+
+            #right_player_score_container{
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+                float: right;
+                text-align: center;
+            }
+
+            .score_text{
+                font-size: 30px;
+                font-family: Arial, monospace;
+                text-shadow: 0 0 13px green;
+                color: yellow;
+                margin: 0;
+                padding-left: 6px;
+                padding-right: 6px;
+                text-align: center;
+                
+            }
+
+            .button {
+                border: none;
+                color: white;
+                padding: 15px 32px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 4px 2px;
+                cursor: pointer;
+            }
+
+            .button_left {background-color: red;} 
+            .button_right {background-color: blue;} 
+            
+            </style>
+            
+            <script>
+                /*
+                Set score value
+                bar - reference to a bar object
+                score - reference to score object
+                value - value in % that should be set
+                */
+                function setScore(bar, score, value){
+                    // Progressbar animation
+                    bar.animate([
+                    // keyframes
+                    { width: bar.style.width }, // start state
+                    { width: value + '%' } // finish state
+                        ], {
+                        // timing options
+                        duration: 400
+                    });
+                    bar.style.width = value + "%";
+
+                    score.innerHTML=value
+                }
+
+                function button_left_click() {
+                    var value = Math.floor(Math.random() * 100);
+                    var bar = document.getElementById("left_player_progress_bar");
+                    var score = document.getElementById("score_text_left");
+
+                    setScore(bar, score, value)
+                    
+                }
+
+                function button_right_click() {
+                    var value = Math.floor(Math.random() * 100);
+                    var bar = document.getElementById("right_player_progress_bar");
+                    var score = document.getElementById("score_text_right");
+
+                    setScore(bar, score, value)
+                }
+
+                         
+            </script>
+    </head>
+    <body>
+ 
+        
+         <!--Video-->
+      
+         <div>
+            <video id="videoPlayer" width="100%" margin="0" padding="0" controls>
+                <source src="MatrixBattle.mp4" type="video/mp4">
+                Your browser does not support HTML5 video.
+            </video> 
+            
+        </div>
+     
+        
+        <!--Fullscreen overlay-->
+        <div id="fulls_screen_container">
+            <!--TODO: refactor that block-->
+            <img id= "overlayimage" src="OverlayMask.png"/>
+
+            <!--Progress bar-->
+            <div id="progress_bar_container">
+
+                <div id="left_player_progress_bar_container">
+                    <div id="left_player_progress_bar" style="width:100%"></div>
+                </div> 
+                
+
+                <div id="right_player_progress_bar_container">
+                    <div id="right_player_progress_bar" style="width:100%"></div>
+                </div>
+ 
+            </div>
+            <!--Score-->
+            <div id="players_score_container">
+                <div id="left_player_score_container">
+                    <p id = "score_text_left" class="score_text" style="text-align:right">
+                            100
+                        </p>
+                </div>
+                <div id="right_player_score_container">
+                    <p id = "score_text_right" class="score_text" style="text-align:left">
+                        100
+                    </p>
+                </div>
+            </div>
+            
+        </div>
+
+        <!--
+        <div>
+            <button class="button_left" onclick="button_left_click();">Left Red</button>
+            <button class="button_right" onclick="button_right_click();">Right Blue</button>
+            <button class="button_right" onclick="execCurrentEvent();">Event Exceution</button>
+
+        </div>
+        -->
+        
+        <!--Timer that scans current video position-->
+        <script>
+        
+            function videoTimer() {
+                /*
+                videoPlayer = document.getElementById("videoPlayer");
+                
+
+                var bar = document.getElementById("left_player_progress_bar");
+                var score = document.getElementById("score_text_left");
+                
+                var value = Math.round(videoPlayer.currentTime);
+                setScore(bar, score, value);
+
+                var bar = document.getElementById("right_player_progress_bar");
+                var score = document.getElementById("score_text_right");
+                
+                var value = Math.round(videoPlayer.currentTime);
+                setScore(bar, score, value);
+                */
+                execCurrentEvent();
+            }  
+
+            function execCurrentEvent()
+            {
+                var json_string = 
+                '{"events":[' +
+                    '{"T":"0", "LP":"100", "RP":"100" },' +
+                    '{"T":"6", "LP":"100", "RP":"97" },' +
+                    '{"T":"15", "LP":"70", "RP":"97" },' +
+                    '{"T":"25", "LP":"50", "RP":"97" },' +
+                    '{"T":"34", "LP":"30", "RP":"97" },' +
+                    '{"T":"39", "LP":"27", "RP":"97" },' +
+                    '{"T":"49", "LP":"19", "RP":"97" },' +
+                    '{"T":"51", "LP":"15", "RP":"97" },' +
+                    '{"T":"56", "LP":"10", "RP":"97" },' +
+                    '{"T":"71", "LP":"3", "RP":"97" },' +
+                    '{"T":"86", "LP":"3", "RP":"50" },' +
+                    '{"T":"86", "LP":"3", "RP":"2" }' +
+                ']' +
+                '}';
+            
+                var events = JSON.parse(json_string).events;
+
+                videoPlayer = document.getElementById("videoPlayer");
+                var current_time = videoPlayer.currentTime
+
+                var active_event
+                for (var key in events){
+                    event = events[key]
+                    /*console.log (key + ":" + event.T)*/
+                    if (event.T <= current_time){
+                        active_event=event        
+                    }
+                }
+                if (active_event!==undefined){
+                    /*console.log("Current time:" + current_time + " Event for execution:" + active_event.T)*/
+
+                    if (active_event.LP!==undefined){
+                        var bar = document.getElementById("left_player_progress_bar");
+                        var score = document.getElementById("score_text_left");
+                        setScore(bar,score,active_event.LP)
+                    }
+
+                    if (active_event.RP!==undefined){
+                        var bar = document.getElementById("right_player_progress_bar");
+                        var score = document.getElementById("score_text_right");
+                        setScore(bar,score,active_event.RP)
+                    }
+
+                }
+
+            }
+            setInterval(execCurrentEvent, 500);
+            document.getElementById("videoPlayer").play();
+        </script>    
+    </body>
+</html>    
