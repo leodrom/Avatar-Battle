@@ -200,6 +200,7 @@
                 </div>
  
             </div>
+
             <!--Score-->
             <div id="players_score_container">
                 <div id="left_player_score_container">
@@ -216,6 +217,7 @@
             
         </div>
 
+        <!-- Debug buttons. Should be commented for the release version -->
         <!--
         <div>
             <button class="button_left" onclick="button_left_click();">Left Red</button>
@@ -248,8 +250,14 @@
                 execCurrentEvent();
             }  
 
+            // Function that executes animation script
             function execCurrentEvent()
             {
+
+                // Script that should be prepared by the external confiruration application
+                // T - time in seconds for the event
+                // LP - left player score value
+                // RP - Right player score value
                 var json_string = 
                 '{"events":[' +
                     '{"T":"0", "LP":"100", "RP":"100" },' +
@@ -298,7 +306,10 @@
                 }
 
             }
+            
+            // Set timer that calls ExecCurrentEnevt function. Current event function set layout according to script.
             setInterval(execCurrentEvent, 500);
+            // Warning! Autoplay function is disabled for some browsers. But it works in OBS.
             document.getElementById("videoPlayer").play();
         </script>    
     </body>
